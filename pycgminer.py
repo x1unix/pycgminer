@@ -23,16 +23,16 @@ class CgminerAPI(object):
                 # Parameter must be converted to basestring (no int)
                 payload.update({'parameter': unicode(arg)})
 
-            sock.send(json.dumps(payload))
+            sock.send(json.dumps(payload).encode())
             received = self._receive(sock)
         finally:
             sock.shutdown(socket.SHUT_RDWR)
             sock.close()
 
-        return json.loads(received[:-1])
+        return json.loads(received)
 
     def _receive(self, sock, size=4096):
-        msg = ''
+        msg = b''
         while 1:
             chunk = sock.recv(size)
             if chunk:
